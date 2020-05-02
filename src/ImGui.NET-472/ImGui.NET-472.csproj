@@ -88,6 +88,7 @@
     <Compile Include="..\ImGui.NET\Generated\ImGuiIO.gen.cs" />
     <Compile Include="..\ImGui.NET\Generated\ImGuiKey.gen.cs" />
     <Compile Include="..\ImGui.NET\Generated\ImGuiListClipper.gen.cs" />
+    <Compile Include="..\ImGui.NET\Generated\ImGuiMouseButton.gen.cs" />
     <Compile Include="..\ImGui.NET\Generated\ImGuiMouseCursor.gen.cs" />
     <Compile Include="..\ImGui.NET\Generated\ImGuiNative.gen.cs" />
     <Compile Include="..\ImGui.NET\Generated\ImGuiNavInput.gen.cs" />
