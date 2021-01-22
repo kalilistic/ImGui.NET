@@ -44,6 +44,39 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\ImGui.NET\Generated\ImGuiButtonFlags.gen.cs">
+      <Link>ImGui.NET\Generated\ImGuiButtonFlags.gen.cs</Link>
+    </Compile>
+    <Compile Include="..\ImGui.NET\Generated\ImGuiDockNodeFlags.gen.cs">
+      <Link>ImGui.NET\Generated\ImGuiDockNodeFlags.gen.cs</Link>
+    </Compile>
+    <Compile Include="..\ImGui.NET\Generated\ImGuiKeyModFlags.gen.cs">
+      <Link>ImGui.NET\Generated\ImGuiKeyModFlags.gen.cs</Link>
+    </Compile>
+    <Compile Include="..\ImGui.NET\Generated\ImGuiMouseButton.gen.cs">
+      <Link>ImGui.NET\Generated\ImGuiMouseButton.gen.cs</Link>
+    </Compile>
+    <Compile Include="..\ImGui.NET\Generated\ImGuiPlatformIO.gen.cs">
+      <Link>ImGui.NET\Generated\ImGuiPlatformIO.gen.cs</Link>
+    </Compile>
+    <Compile Include="..\ImGui.NET\Generated\ImGuiPlatformMonitor.gen.cs">
+      <Link>ImGui.NET\Generated\ImGuiPlatformMonitor.gen.cs</Link>
+    </Compile>
+    <Compile Include="..\ImGui.NET\Generated\ImGuiPopupFlags.gen.cs">
+      <Link>ImGui.NET\Generated\ImGuiPopupFlags.gen.cs</Link>
+    </Compile>
+    <Compile Include="..\ImGui.NET\Generated\ImGuiSliderFlags.gen.cs">
+      <Link>ImGui.NET\Generated\ImGuiSliderFlags.gen.cs</Link>
+    </Compile>
+    <Compile Include="..\ImGui.NET\Generated\ImGuiViewport.gen.cs">
+      <Link>ImGui.NET\Generated\ImGuiViewport.gen.cs</Link>
+    </Compile>
+    <Compile Include="..\ImGui.NET\Generated\ImGuiViewportFlags.gen.cs">
+      <Link>ImGui.NET\Generated\ImGuiViewportFlags.gen.cs</Link>
+    </Compile>
+    <Compile Include="..\ImGui.NET\Generated\ImGuiWindowClass.gen.cs">
+      <Link>ImGui.NET\Generated\ImGuiWindowClass.gen.cs</Link>
+    </Compile>
     <Compile Include="..\ImGui.NET\ImDrawList.Manual.cs" />
     <Compile Include="..\ImGui.NET\ImGui.Manual.cs" />
     <Compile Include="..\ImGui.NET\ImGuiSizeCallback.cs" />
