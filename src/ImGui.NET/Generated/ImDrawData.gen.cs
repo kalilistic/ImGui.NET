@@ -34,19 +34,19 @@ namespace ImGuiNET
         public ref Vector2 FramebufferScale => ref Unsafe.AsRef<Vector2>(&NativePtr->FramebufferScale);
         public void Clear()
         {
-            ImGuiNative.ImDrawData_Clear(NativePtr);
+            ImGuiNative.ImDrawData_Clear((ImDrawData*)(NativePtr));
         }
         public void DeIndexAllBuffers()
         {
-            ImGuiNative.ImDrawData_DeIndexAllBuffers(NativePtr);
+            ImGuiNative.ImDrawData_DeIndexAllBuffers((ImDrawData*)(NativePtr));
         }
         public void Destroy()
         {
-            ImGuiNative.ImDrawData_destroy(NativePtr);
+            ImGuiNative.ImDrawData_destroy((ImDrawData*)(NativePtr));
         }
         public void ScaleClipRects(Vector2 fb_scale)
         {
-            ImGuiNative.ImDrawData_ScaleClipRects(NativePtr, fb_scale);
+            ImGuiNative.ImDrawData_ScaleClipRects((ImDrawData*)(NativePtr), fb_scale);
         }
     }
 }
