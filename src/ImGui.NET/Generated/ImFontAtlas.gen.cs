@@ -469,6 +469,23 @@ namespace ImGuiNET
                 }
             }
         }
+        public bool GetMouseCursorTexData(int cursor, out Vector2 out_offset, out Vector2 out_size, out Vector2 out_uv_border, out Vector2 out_uv_fill)
+        {
+            fixed (Vector2* native_out_offset = &out_offset)
+            {
+                fixed (Vector2* native_out_size = &out_size)
+                {
+                    fixed (Vector2* native_out_uv_border = &out_uv_border)
+                    {
+                        fixed (Vector2* native_out_uv_fill = &out_uv_fill)
+                        {
+                            byte ret = ImGuiNative.ImFontAtlas_GetMouseCursorTexData((ImFontAtlas*)(NativePtr), (ImGuiMouseCursor)cursor, native_out_offset, native_out_size, native_out_uv_border, native_out_uv_fill);
+                            return ret != 0;
+                        }
+                    }
+                }
+            }
+        }
         public void GetTexDataAsAlpha8(out byte* out_pixels, out int out_width, out int out_height)
         {
             int* out_bytes_per_pixel = null;
