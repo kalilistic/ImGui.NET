@@ -210,6 +210,24 @@ namespace CodeGenerator
                                     defaults.Add(orderedDefaults[j].Key, orderedDefaults[j].Value);
                                 }
                                 EmitOverload(writer, overload, defaults, "NativePtr");
+                                
+                                for (int j = 0; j < overload.Parameters.Length; j++)
+                                {
+                                    // We only want to replace enums that are not flags that are not a default value for this overload
+                                    if (overload.Parameters[j].IsEnum && 
+                                        !overload.Parameters[j].Type.Contains("Flags") && 
+                                        !defaults.TryGetValue(overload.Parameters[j].Name, out var unused))
+                                    {
+                                        var primitiveOverload =
+                                            new OverloadDefinition(
+                                                overload.ExportedName, overload.FriendlyName, (TypeReference[])overload.Parameters.Clone(), overload.DefaultValues,
+                                                overload.ReturnType, overload.StructName, overload.Comment, overload.IsConstructor, overload.IsDestructor);
+                                        var oldParam = primitiveOverload.Parameters[j];
+                                        var newParam = new TypeReference(oldParam.Name, "int", oldParam.ArraySize, new EnumDefinition[]{});
+                                        primitiveOverload.Parameters[j] = newParam;
+                                        EmitOverload(writer, primitiveOverload, defaults, "NativePtr", j, oldParam.Type);
+                                    }
+                                }
                             }
                         }
                     }
@@ -337,6 +355,24 @@ namespace CodeGenerator
                                 defaults.Add(orderedDefaults[j].Key, orderedDefaults[j].Value);
                             }
                             EmitOverload(writer, overload, defaults, null);
+                            
+                            for (int j = 0; j < overload.Parameters.Length; j++)
+                            {
+                                // We only want to replace enums that are not flags that are not a default value for this overload
+                                if (overload.Parameters[j].IsEnum && 
+                                    !overload.Parameters[j].Type.Contains("Flags") && 
+                                    !defaults.TryGetValue(overload.Parameters[j].Name, out var unused))
+                                {
+                                    var primitiveOverload =
+                                        new OverloadDefinition(
+                                            overload.ExportedName, overload.FriendlyName, (TypeReference[])overload.Parameters.Clone(), overload.DefaultValues,
+                                            overload.ReturnType, overload.StructName, overload.Comment, overload.IsConstructor, overload.IsDestructor);
+                                    var oldParam = primitiveOverload.Parameters[j];
+                                    var newParam = new TypeReference(oldParam.Name, "int", oldParam.ArraySize, new EnumDefinition[]{});
+                                    primitiveOverload.Parameters[j] = newParam;
+                                    EmitOverload(writer, primitiveOverload, defaults, null, j, oldParam.Type);
+                                }
+                            }
                         }
                     }
                 }
@@ -381,7 +417,9 @@ namespace CodeGenerator
             CSharpCodeWriter writer,
             OverloadDefinition overload,
             Dictionary<string, string> defaultValues,
-            string selfName)
+            string selfName,
+            int primitiveOverloadIndex = -1,
+            string primitiveOverloadEnumName = null)
         {
             if (overload.Parameters.Where(tr => tr.Name.EndsWith("_begin") || tr.Name.EndsWith("_end"))
                 .Any(tr => !defaultValues.ContainsKey(tr.Name)))
@@ -622,7 +660,10 @@ namespace CodeGenerator
                     writer.PushBlock($"fixed ({nativePinType} native_{tr.Name} = &{mp.PinTarget})");
                 }
 
-                nativeInvocationArgs.Add(mp.VarName);
+                var argString = mp.VarName;
+                if (i == primitiveOverloadIndex)
+                    argString = $"({primitiveOverloadEnumName}){mp.VarName}";
+                nativeInvocationArgs.Add(argString);
             }
 
             string nativeInvocationStr = string.Join(", ", nativeInvocationArgs);
