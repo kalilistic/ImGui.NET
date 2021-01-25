@@ -187,6 +187,11 @@ namespace ImGuiNET
         {
             ImGuiNative.ImDrawList_AddImageRounded((ImDrawList*)(NativePtr), user_texture_id, p_min, p_max, uv_min, uv_max, col, rounding, rounding_corners);
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public void AddImageRounded(IntPtr user_texture_id, Vector2 p_min, Vector2 p_max, Vector2 uv_min, Vector2 uv_max, uint col, float rounding, int rounding_corners)
+        {
+            ImGuiNative.ImDrawList_AddImageRounded((ImDrawList*)(NativePtr), user_texture_id, p_min, p_max, uv_min, uv_max, col, rounding, (ImDrawCornerFlags)rounding_corners);
+        }
         public void AddLine(Vector2 p1, Vector2 p2, uint col)
         {
             float thickness = 1.0f;
@@ -248,9 +253,20 @@ namespace ImGuiNET
             float thickness = 1.0f;
             ImGuiNative.ImDrawList_AddRect((ImDrawList*)(NativePtr), p_min, p_max, col, rounding, rounding_corners, thickness);
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public void AddRect(Vector2 p_min, Vector2 p_max, uint col, float rounding, int rounding_corners)
+        {
+            float thickness = 1.0f;
+            ImGuiNative.ImDrawList_AddRect((ImDrawList*)(NativePtr), p_min, p_max, col, rounding, (ImDrawCornerFlags)rounding_corners, thickness);
+        }
         public void AddRect(Vector2 p_min, Vector2 p_max, uint col, float rounding, ImDrawCornerFlags rounding_corners, float thickness)
         {
             ImGuiNative.ImDrawList_AddRect((ImDrawList*)(NativePtr), p_min, p_max, col, rounding, rounding_corners, thickness);
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public void AddRect(Vector2 p_min, Vector2 p_max, uint col, float rounding, int rounding_corners, float thickness)
+        {
+            ImGuiNative.ImDrawList_AddRect((ImDrawList*)(NativePtr), p_min, p_max, col, rounding, (ImDrawCornerFlags)rounding_corners, thickness);
         }
         public void AddRectFilled(Vector2 p_min, Vector2 p_max, uint col)
         {
@@ -266,6 +282,11 @@ namespace ImGuiNET
         public void AddRectFilled(Vector2 p_min, Vector2 p_max, uint col, float rounding, ImDrawCornerFlags rounding_corners)
         {
             ImGuiNative.ImDrawList_AddRectFilled((ImDrawList*)(NativePtr), p_min, p_max, col, rounding, rounding_corners);
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public void AddRectFilled(Vector2 p_min, Vector2 p_max, uint col, float rounding, int rounding_corners)
+        {
+            ImGuiNative.ImDrawList_AddRectFilled((ImDrawList*)(NativePtr), p_min, p_max, col, rounding, (ImDrawCornerFlags)rounding_corners);
         }
         public void AddRectFilledMultiColor(Vector2 p_min, Vector2 p_max, uint col_upr_left, uint col_upr_right, uint col_bot_right, uint col_bot_left)
         {
@@ -369,6 +390,11 @@ namespace ImGuiNET
         public void PathRect(Vector2 rect_min, Vector2 rect_max, float rounding, ImDrawCornerFlags rounding_corners)
         {
             ImGuiNative.ImDrawList_PathRect((ImDrawList*)(NativePtr), rect_min, rect_max, rounding, rounding_corners);
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public void PathRect(Vector2 rect_min, Vector2 rect_max, float rounding, int rounding_corners)
+        {
+            ImGuiNative.ImDrawList_PathRect((ImDrawList*)(NativePtr), rect_min, rect_max, rounding, (ImDrawCornerFlags)rounding_corners);
         }
         public void PathStroke(uint col, bool closed)
         {

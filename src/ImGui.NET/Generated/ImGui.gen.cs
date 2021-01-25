@@ -62,6 +62,34 @@ namespace ImGuiNET
             }
             return new ImGuiPayloadPtr(ret);
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static ImGuiPayloadPtr AcceptDragDropPayload(string type, int flags)
+        {
+            byte* native_type;
+            int type_byteCount = 0;
+            if (type != null)
+            {
+                type_byteCount = Encoding.UTF8.GetByteCount(type);
+                if (type_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_type = Util.Allocate(type_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_type_stackBytes = stackalloc byte[type_byteCount + 1];
+                    native_type = native_type_stackBytes;
+                }
+                int native_type_offset = Util.GetUtf8(type, native_type, type_byteCount);
+                native_type[native_type_offset] = 0;
+            }
+            else { native_type = null; }
+            ImGuiPayload* ret = ImGuiNative.igAcceptDragDropPayload(native_type, (ImGuiDragDropFlags)flags);
+            if (type_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_type);
+            }
+            return new ImGuiPayloadPtr(ret);
+        }
         public static void AlignTextToFramePadding()
         {
             ImGuiNative.igAlignTextToFramePadding();
@@ -93,6 +121,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool ArrowButton(string str_id, int dir)
         {
             byte* native_str_id;
@@ -203,6 +232,37 @@ namespace ImGuiNET
             byte native_p_open_val = p_open ? (byte)1 : (byte)0;
             byte* native_p_open = &native_p_open_val;
             byte ret = ImGuiNative.igBegin(native_name, native_p_open, flags);
+            if (name_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_name);
+            }
+            p_open = native_p_open_val != 0;
+            return ret != 0;
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool Begin(string name, ref bool p_open, int flags)
+        {
+            byte* native_name;
+            int name_byteCount = 0;
+            if (name != null)
+            {
+                name_byteCount = Encoding.UTF8.GetByteCount(name);
+                if (name_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_name = Util.Allocate(name_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_name_stackBytes = stackalloc byte[name_byteCount + 1];
+                    native_name = native_name_stackBytes;
+                }
+                int native_name_offset = Util.GetUtf8(name, native_name, name_byteCount);
+                native_name[native_name_offset] = 0;
+            }
+            else { native_name = null; }
+            byte native_p_open_val = p_open ? (byte)1 : (byte)0;
+            byte* native_p_open = &native_p_open_val;
+            byte ret = ImGuiNative.igBegin(native_name, native_p_open, (ImGuiWindowFlags)flags);
             if (name_byteCount > Util.StackAllocationSizeLimit)
             {
                 Util.Free(native_name);
@@ -326,6 +386,35 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool BeginChild(string str_id, Vector2 size, bool border, int flags)
+        {
+            byte* native_str_id;
+            int str_id_byteCount = 0;
+            if (str_id != null)
+            {
+                str_id_byteCount = Encoding.UTF8.GetByteCount(str_id);
+                if (str_id_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_str_id = Util.Allocate(str_id_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_str_id_stackBytes = stackalloc byte[str_id_byteCount + 1];
+                    native_str_id = native_str_id_stackBytes;
+                }
+                int native_str_id_offset = Util.GetUtf8(str_id, native_str_id, str_id_byteCount);
+                native_str_id[native_str_id_offset] = 0;
+            }
+            else { native_str_id = null; }
+            byte native_border = border ? (byte)1 : (byte)0;
+            byte ret = ImGuiNative.igBeginChildStr(native_str_id, size, native_border, (ImGuiWindowFlags)flags);
+            if (str_id_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_str_id);
+            }
+            return ret != 0;
+        }
         public static bool BeginChild(uint id)
         {
             Vector2 size = new Vector2();
@@ -354,6 +443,13 @@ namespace ImGuiNET
             byte ret = ImGuiNative.igBeginChildID(id, size, native_border, flags);
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool BeginChild(uint id, Vector2 size, bool border, int flags)
+        {
+            byte native_border = border ? (byte)1 : (byte)0;
+            byte ret = ImGuiNative.igBeginChildID(id, size, native_border, (ImGuiWindowFlags)flags);
+            return ret != 0;
+        }
         public static bool BeginChildFrame(uint id, Vector2 size)
         {
             ImGuiWindowFlags flags = (ImGuiWindowFlags)0;
@@ -363,6 +459,12 @@ namespace ImGuiNET
         public static bool BeginChildFrame(uint id, Vector2 size, ImGuiWindowFlags flags)
         {
             byte ret = ImGuiNative.igBeginChildFrame(id, size, flags);
+            return ret != 0;
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool BeginChildFrame(uint id, Vector2 size, int flags)
+        {
+            byte ret = ImGuiNative.igBeginChildFrame(id, size, (ImGuiWindowFlags)flags);
             return ret != 0;
         }
         public static bool BeginCombo(string label, string preview_value)
@@ -464,6 +566,56 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool BeginCombo(string label, string preview_value, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte* native_preview_value;
+            int preview_value_byteCount = 0;
+            if (preview_value != null)
+            {
+                preview_value_byteCount = Encoding.UTF8.GetByteCount(preview_value);
+                if (preview_value_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_preview_value = Util.Allocate(preview_value_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_preview_value_stackBytes = stackalloc byte[preview_value_byteCount + 1];
+                    native_preview_value = native_preview_value_stackBytes;
+                }
+                int native_preview_value_offset = Util.GetUtf8(preview_value, native_preview_value, preview_value_byteCount);
+                native_preview_value[native_preview_value_offset] = 0;
+            }
+            else { native_preview_value = null; }
+            byte ret = ImGuiNative.igBeginCombo(native_label, native_preview_value, (ImGuiComboFlags)flags);
+            if (label_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_label);
+            }
+            if (preview_value_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_preview_value);
+            }
+            return ret != 0;
+        }
         public static bool BeginDragDropSource()
         {
             ImGuiDragDropFlags flags = (ImGuiDragDropFlags)0;
@@ -473,6 +625,12 @@ namespace ImGuiNET
         public static bool BeginDragDropSource(ImGuiDragDropFlags flags)
         {
             byte ret = ImGuiNative.igBeginDragDropSource(flags);
+            return ret != 0;
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool BeginDragDropSource(int flags)
+        {
+            byte ret = ImGuiNative.igBeginDragDropSource((ImGuiDragDropFlags)flags);
             return ret != 0;
         }
         public static bool BeginDragDropTarget()
@@ -605,6 +763,34 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool BeginPopup(string str_id, int flags)
+        {
+            byte* native_str_id;
+            int str_id_byteCount = 0;
+            if (str_id != null)
+            {
+                str_id_byteCount = Encoding.UTF8.GetByteCount(str_id);
+                if (str_id_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_str_id = Util.Allocate(str_id_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_str_id_stackBytes = stackalloc byte[str_id_byteCount + 1];
+                    native_str_id = native_str_id_stackBytes;
+                }
+                int native_str_id_offset = Util.GetUtf8(str_id, native_str_id, str_id_byteCount);
+                native_str_id[native_str_id_offset] = 0;
+            }
+            else { native_str_id = null; }
+            byte ret = ImGuiNative.igBeginPopup(native_str_id, (ImGuiWindowFlags)flags);
+            if (str_id_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_str_id);
+            }
+            return ret != 0;
+        }
         public static bool BeginPopupContextItem()
         {
             byte* native_str_id = null;
@@ -661,6 +847,34 @@ namespace ImGuiNET
             }
             else { native_str_id = null; }
             byte ret = ImGuiNative.igBeginPopupContextItem(native_str_id, popup_flags);
+            if (str_id_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_str_id);
+            }
+            return ret != 0;
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool BeginPopupContextItem(string str_id, int popup_flags)
+        {
+            byte* native_str_id;
+            int str_id_byteCount = 0;
+            if (str_id != null)
+            {
+                str_id_byteCount = Encoding.UTF8.GetByteCount(str_id);
+                if (str_id_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_str_id = Util.Allocate(str_id_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_str_id_stackBytes = stackalloc byte[str_id_byteCount + 1];
+                    native_str_id = native_str_id_stackBytes;
+                }
+                int native_str_id_offset = Util.GetUtf8(str_id, native_str_id, str_id_byteCount);
+                native_str_id[native_str_id_offset] = 0;
+            }
+            else { native_str_id = null; }
+            byte ret = ImGuiNative.igBeginPopupContextItem(native_str_id, (ImGuiPopupFlags)popup_flags);
             if (str_id_byteCount > Util.StackAllocationSizeLimit)
             {
                 Util.Free(native_str_id);
@@ -729,6 +943,34 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool BeginPopupContextVoid(string str_id, int popup_flags)
+        {
+            byte* native_str_id;
+            int str_id_byteCount = 0;
+            if (str_id != null)
+            {
+                str_id_byteCount = Encoding.UTF8.GetByteCount(str_id);
+                if (str_id_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_str_id = Util.Allocate(str_id_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_str_id_stackBytes = stackalloc byte[str_id_byteCount + 1];
+                    native_str_id = native_str_id_stackBytes;
+                }
+                int native_str_id_offset = Util.GetUtf8(str_id, native_str_id, str_id_byteCount);
+                native_str_id[native_str_id_offset] = 0;
+            }
+            else { native_str_id = null; }
+            byte ret = ImGuiNative.igBeginPopupContextVoid(native_str_id, (ImGuiPopupFlags)popup_flags);
+            if (str_id_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_str_id);
+            }
+            return ret != 0;
+        }
         public static bool BeginPopupContextWindow()
         {
             byte* native_str_id = null;
@@ -785,6 +1027,34 @@ namespace ImGuiNET
             }
             else { native_str_id = null; }
             byte ret = ImGuiNative.igBeginPopupContextWindow(native_str_id, popup_flags);
+            if (str_id_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_str_id);
+            }
+            return ret != 0;
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool BeginPopupContextWindow(string str_id, int popup_flags)
+        {
+            byte* native_str_id;
+            int str_id_byteCount = 0;
+            if (str_id != null)
+            {
+                str_id_byteCount = Encoding.UTF8.GetByteCount(str_id);
+                if (str_id_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_str_id = Util.Allocate(str_id_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_str_id_stackBytes = stackalloc byte[str_id_byteCount + 1];
+                    native_str_id = native_str_id_stackBytes;
+                }
+                int native_str_id_offset = Util.GetUtf8(str_id, native_str_id, str_id_byteCount);
+                native_str_id[native_str_id_offset] = 0;
+            }
+            else { native_str_id = null; }
+            byte ret = ImGuiNative.igBeginPopupContextWindow(native_str_id, (ImGuiPopupFlags)popup_flags);
             if (str_id_byteCount > Util.StackAllocationSizeLimit)
             {
                 Util.Free(native_str_id);
@@ -881,6 +1151,37 @@ namespace ImGuiNET
             p_open = native_p_open_val != 0;
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool BeginPopupModal(string name, ref bool p_open, int flags)
+        {
+            byte* native_name;
+            int name_byteCount = 0;
+            if (name != null)
+            {
+                name_byteCount = Encoding.UTF8.GetByteCount(name);
+                if (name_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_name = Util.Allocate(name_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_name_stackBytes = stackalloc byte[name_byteCount + 1];
+                    native_name = native_name_stackBytes;
+                }
+                int native_name_offset = Util.GetUtf8(name, native_name, name_byteCount);
+                native_name[native_name_offset] = 0;
+            }
+            else { native_name = null; }
+            byte native_p_open_val = p_open ? (byte)1 : (byte)0;
+            byte* native_p_open = &native_p_open_val;
+            byte ret = ImGuiNative.igBeginPopupModal(native_name, native_p_open, (ImGuiWindowFlags)flags);
+            if (name_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_name);
+            }
+            p_open = native_p_open_val != 0;
+            return ret != 0;
+        }
         public static bool BeginTabBar(string str_id)
         {
             byte* native_str_id;
@@ -930,6 +1231,34 @@ namespace ImGuiNET
             }
             else { native_str_id = null; }
             byte ret = ImGuiNative.igBeginTabBar(native_str_id, flags);
+            if (str_id_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_str_id);
+            }
+            return ret != 0;
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool BeginTabBar(string str_id, int flags)
+        {
+            byte* native_str_id;
+            int str_id_byteCount = 0;
+            if (str_id != null)
+            {
+                str_id_byteCount = Encoding.UTF8.GetByteCount(str_id);
+                if (str_id_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_str_id = Util.Allocate(str_id_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_str_id_stackBytes = stackalloc byte[str_id_byteCount + 1];
+                    native_str_id = native_str_id_stackBytes;
+                }
+                int native_str_id_offset = Util.GetUtf8(str_id, native_str_id, str_id_byteCount);
+                native_str_id[native_str_id_offset] = 0;
+            }
+            else { native_str_id = null; }
+            byte ret = ImGuiNative.igBeginTabBar(native_str_id, (ImGuiTabBarFlags)flags);
             if (str_id_byteCount > Util.StackAllocationSizeLimit)
             {
                 Util.Free(native_str_id);
@@ -1019,6 +1348,37 @@ namespace ImGuiNET
             byte native_p_open_val = p_open ? (byte)1 : (byte)0;
             byte* native_p_open = &native_p_open_val;
             byte ret = ImGuiNative.igBeginTabItem(native_label, native_p_open, flags);
+            if (label_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_label);
+            }
+            p_open = native_p_open_val != 0;
+            return ret != 0;
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool BeginTabItem(string label, ref bool p_open, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte native_p_open_val = p_open ? (byte)1 : (byte)0;
+            byte* native_p_open = &native_p_open_val;
+            byte ret = ImGuiNative.igBeginTabItem(native_label, native_p_open, (ImGuiTabItemFlags)flags);
             if (label_byteCount > Util.StackAllocationSizeLimit)
             {
                 Util.Free(native_label);
@@ -1259,6 +1619,34 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool CollapsingHeader(string label, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte ret = ImGuiNative.igCollapsingHeaderTreeNodeFlags(native_label, (ImGuiTreeNodeFlags)flags);
+            if (label_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_label);
+            }
+            return ret != 0;
+        }
         public static bool CollapsingHeader(string label, ref bool p_open)
         {
             byte* native_label;
@@ -1313,6 +1701,37 @@ namespace ImGuiNET
             byte native_p_open_val = p_open ? (byte)1 : (byte)0;
             byte* native_p_open = &native_p_open_val;
             byte ret = ImGuiNative.igCollapsingHeaderBoolPtr(native_label, native_p_open, flags);
+            if (label_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_label);
+            }
+            p_open = native_p_open_val != 0;
+            return ret != 0;
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool CollapsingHeader(string label, ref bool p_open, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte native_p_open_val = p_open ? (byte)1 : (byte)0;
+            byte* native_p_open = &native_p_open_val;
+            byte ret = ImGuiNative.igCollapsingHeaderBoolPtr(native_label, native_p_open, (ImGuiTreeNodeFlags)flags);
             if (label_byteCount > Util.StackAllocationSizeLimit)
             {
                 Util.Free(native_label);
@@ -1377,6 +1796,35 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool ColorButton(string desc_id, Vector4 col, int flags)
+        {
+            byte* native_desc_id;
+            int desc_id_byteCount = 0;
+            if (desc_id != null)
+            {
+                desc_id_byteCount = Encoding.UTF8.GetByteCount(desc_id);
+                if (desc_id_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_desc_id = Util.Allocate(desc_id_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_desc_id_stackBytes = stackalloc byte[desc_id_byteCount + 1];
+                    native_desc_id = native_desc_id_stackBytes;
+                }
+                int native_desc_id_offset = Util.GetUtf8(desc_id, native_desc_id, desc_id_byteCount);
+                native_desc_id[native_desc_id_offset] = 0;
+            }
+            else { native_desc_id = null; }
+            Vector2 size = new Vector2();
+            byte ret = ImGuiNative.igColorButton(native_desc_id, col, (ImGuiColorEditFlags)flags, size);
+            if (desc_id_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_desc_id);
+            }
+            return ret != 0;
+        }
         public static bool ColorButton(string desc_id, Vector4 col, ImGuiColorEditFlags flags, Vector2 size)
         {
             byte* native_desc_id;
@@ -1398,6 +1846,34 @@ namespace ImGuiNET
             }
             else { native_desc_id = null; }
             byte ret = ImGuiNative.igColorButton(native_desc_id, col, flags, size);
+            if (desc_id_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_desc_id);
+            }
+            return ret != 0;
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool ColorButton(string desc_id, Vector4 col, int flags, Vector2 size)
+        {
+            byte* native_desc_id;
+            int desc_id_byteCount = 0;
+            if (desc_id != null)
+            {
+                desc_id_byteCount = Encoding.UTF8.GetByteCount(desc_id);
+                if (desc_id_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_desc_id = Util.Allocate(desc_id_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_desc_id_stackBytes = stackalloc byte[desc_id_byteCount + 1];
+                    native_desc_id = native_desc_id_stackBytes;
+                }
+                int native_desc_id_offset = Util.GetUtf8(desc_id, native_desc_id, desc_id_byteCount);
+                native_desc_id[native_desc_id_offset] = 0;
+            }
+            else { native_desc_id = null; }
+            byte ret = ImGuiNative.igColorButton(native_desc_id, col, (ImGuiColorEditFlags)flags, size);
             if (desc_id_byteCount > Util.StackAllocationSizeLimit)
             {
                 Util.Free(native_desc_id);
@@ -1502,6 +1978,37 @@ namespace ImGuiNET
                 return ret != 0;
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool ColorEdit3(string label, ref Vector3 col, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            fixed (Vector3* native_col = &col)
+            {
+                byte ret = ImGuiNative.igColorEdit3(native_label, native_col, (ImGuiColorEditFlags)flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                return ret != 0;
+            }
+        }
         public static bool ColorEdit4(string label, ref Vector4 col)
         {
             byte* native_label;
@@ -1563,6 +2070,37 @@ namespace ImGuiNET
                 return ret != 0;
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool ColorEdit4(string label, ref Vector4 col, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            fixed (Vector4* native_col = &col)
+            {
+                byte ret = ImGuiNative.igColorEdit4(native_label, native_col, (ImGuiColorEditFlags)flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                return ret != 0;
+            }
+        }
         public static bool ColorPicker3(string label, ref Vector3 col)
         {
             byte* native_label;
@@ -1617,6 +2155,37 @@ namespace ImGuiNET
             fixed (Vector3* native_col = &col)
             {
                 byte ret = ImGuiNative.igColorPicker3(native_label, native_col, flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                return ret != 0;
+            }
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool ColorPicker3(string label, ref Vector3 col, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            fixed (Vector3* native_col = &col)
+            {
+                byte ret = ImGuiNative.igColorPicker3(native_label, native_col, (ImGuiColorEditFlags)flags);
                 if (label_byteCount > Util.StackAllocationSizeLimit)
                 {
                     Util.Free(native_label);
@@ -1687,6 +2256,38 @@ namespace ImGuiNET
                 return ret != 0;
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool ColorPicker4(string label, ref Vector4 col, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            float* ref_col = null;
+            fixed (Vector4* native_col = &col)
+            {
+                byte ret = ImGuiNative.igColorPicker4(native_label, native_col, (ImGuiColorEditFlags)flags, ref_col);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                return ret != 0;
+            }
+        }
         public static bool ColorPicker4(string label, ref Vector4 col, ImGuiColorEditFlags flags, ref float ref_col)
         {
             byte* native_label;
@@ -1712,6 +2313,40 @@ namespace ImGuiNET
                 fixed (float* native_ref_col = &ref_col)
                 {
                     byte ret = ImGuiNative.igColorPicker4(native_label, native_col, flags, native_ref_col);
+                    if (label_byteCount > Util.StackAllocationSizeLimit)
+                    {
+                        Util.Free(native_label);
+                    }
+                    return ret != 0;
+                }
+            }
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool ColorPicker4(string label, ref Vector4 col, int flags, ref float ref_col)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            fixed (Vector4* native_col = &col)
+            {
+                fixed (float* native_ref_col = &ref_col)
+                {
+                    byte ret = ImGuiNative.igColorPicker4(native_label, native_col, (ImGuiColorEditFlags)flags, native_ref_col);
                     if (label_byteCount > Util.StackAllocationSizeLimit)
                     {
                         Util.Free(native_label);
@@ -2362,6 +2997,59 @@ namespace ImGuiNET
                 return ret != 0;
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool DragFloat(string label, ref float v, float v_speed, float v_min, float v_max, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            fixed (float* native_v = &v)
+            {
+                byte ret = ImGuiNative.igDragFloat(native_label, native_v, v_speed, v_min, v_max, native_format, (ImGuiSliderFlags)flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_format);
+                }
+                return ret != 0;
+            }
+        }
         public static bool DragFloat2(string label, ref Vector2 v)
         {
             byte* native_label;
@@ -2658,6 +3346,59 @@ namespace ImGuiNET
             fixed (Vector2* native_v = &v)
             {
                 byte ret = ImGuiNative.igDragFloat2(native_label, native_v, v_speed, v_min, v_max, native_format, flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_format);
+                }
+                return ret != 0;
+            }
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool DragFloat2(string label, ref Vector2 v, float v_speed, float v_min, float v_max, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            fixed (Vector2* native_v = &v)
+            {
+                byte ret = ImGuiNative.igDragFloat2(native_label, native_v, v_speed, v_min, v_max, native_format, (ImGuiSliderFlags)flags);
                 if (label_byteCount > Util.StackAllocationSizeLimit)
                 {
                     Util.Free(native_label);
@@ -2976,6 +3717,59 @@ namespace ImGuiNET
                 return ret != 0;
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool DragFloat3(string label, ref Vector3 v, float v_speed, float v_min, float v_max, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            fixed (Vector3* native_v = &v)
+            {
+                byte ret = ImGuiNative.igDragFloat3(native_label, native_v, v_speed, v_min, v_max, native_format, (ImGuiSliderFlags)flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_format);
+                }
+                return ret != 0;
+            }
+        }
         public static bool DragFloat4(string label, ref Vector4 v)
         {
             byte* native_label;
@@ -3272,6 +4066,59 @@ namespace ImGuiNET
             fixed (Vector4* native_v = &v)
             {
                 byte ret = ImGuiNative.igDragFloat4(native_label, native_v, v_speed, v_min, v_max, native_format, flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_format);
+                }
+                return ret != 0;
+            }
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool DragFloat4(string label, ref Vector4 v, float v_speed, float v_min, float v_max, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            fixed (Vector4* native_v = &v)
+            {
+                byte ret = ImGuiNative.igDragFloat4(native_label, native_v, v_speed, v_min, v_max, native_format, (ImGuiSliderFlags)flags);
                 if (label_byteCount > Util.StackAllocationSizeLimit)
                 {
                     Util.Free(native_label);
@@ -3713,6 +4560,84 @@ namespace ImGuiNET
                 }
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool DragFloatRange2(string label, ref float v_current_min, ref float v_current_max, float v_speed, float v_min, float v_max, string format, string format_max, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            byte* native_format_max;
+            int format_max_byteCount = 0;
+            if (format_max != null)
+            {
+                format_max_byteCount = Encoding.UTF8.GetByteCount(format_max);
+                if (format_max_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format_max = Util.Allocate(format_max_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_max_stackBytes = stackalloc byte[format_max_byteCount + 1];
+                    native_format_max = native_format_max_stackBytes;
+                }
+                int native_format_max_offset = Util.GetUtf8(format_max, native_format_max, format_max_byteCount);
+                native_format_max[native_format_max_offset] = 0;
+            }
+            else { native_format_max = null; }
+            fixed (float* native_v_current_min = &v_current_min)
+            {
+                fixed (float* native_v_current_max = &v_current_max)
+                {
+                    byte ret = ImGuiNative.igDragFloatRange2(native_label, native_v_current_min, native_v_current_max, v_speed, v_min, v_max, native_format, native_format_max, (ImGuiSliderFlags)flags);
+                    if (label_byteCount > Util.StackAllocationSizeLimit)
+                    {
+                        Util.Free(native_label);
+                    }
+                    if (format_byteCount > Util.StackAllocationSizeLimit)
+                    {
+                        Util.Free(native_format);
+                    }
+                    if (format_max_byteCount > Util.StackAllocationSizeLimit)
+                    {
+                        Util.Free(native_format_max);
+                    }
+                    return ret != 0;
+                }
+            }
+        }
         public static bool DragInt(string label, ref int v)
         {
             byte* native_label;
@@ -4009,6 +4934,59 @@ namespace ImGuiNET
             fixed (int* native_v = &v)
             {
                 byte ret = ImGuiNative.igDragInt(native_label, native_v, v_speed, v_min, v_max, native_format, flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_format);
+                }
+                return ret != 0;
+            }
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool DragInt(string label, ref int v, float v_speed, int v_min, int v_max, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            fixed (int* native_v = &v)
+            {
+                byte ret = ImGuiNative.igDragInt(native_label, native_v, v_speed, v_min, v_max, native_format, (ImGuiSliderFlags)flags);
                 if (label_byteCount > Util.StackAllocationSizeLimit)
                 {
                     Util.Free(native_label);
@@ -4327,6 +5305,59 @@ namespace ImGuiNET
                 return ret != 0;
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool DragInt2(string label, ref int v, float v_speed, int v_min, int v_max, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            fixed (int* native_v = &v)
+            {
+                byte ret = ImGuiNative.igDragInt2(native_label, native_v, v_speed, v_min, v_max, native_format, (ImGuiSliderFlags)flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_format);
+                }
+                return ret != 0;
+            }
+        }
         public static bool DragInt3(string label, ref int v)
         {
             byte* native_label;
@@ -4634,6 +5665,59 @@ namespace ImGuiNET
                 return ret != 0;
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool DragInt3(string label, ref int v, float v_speed, int v_min, int v_max, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            fixed (int* native_v = &v)
+            {
+                byte ret = ImGuiNative.igDragInt3(native_label, native_v, v_speed, v_min, v_max, native_format, (ImGuiSliderFlags)flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_format);
+                }
+                return ret != 0;
+            }
+        }
         public static bool DragInt4(string label, ref int v)
         {
             byte* native_label;
@@ -4930,6 +6014,59 @@ namespace ImGuiNET
             fixed (int* native_v = &v)
             {
                 byte ret = ImGuiNative.igDragInt4(native_label, native_v, v_speed, v_min, v_max, native_format, flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_format);
+                }
+                return ret != 0;
+            }
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool DragInt4(string label, ref int v, float v_speed, int v_min, int v_max, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            fixed (int* native_v = &v)
+            {
+                byte ret = ImGuiNative.igDragInt4(native_label, native_v, v_speed, v_min, v_max, native_format, (ImGuiSliderFlags)flags);
                 if (label_byteCount > Util.StackAllocationSizeLimit)
                 {
                     Util.Free(native_label);
@@ -5371,6 +6508,84 @@ namespace ImGuiNET
                 }
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool DragIntRange2(string label, ref int v_current_min, ref int v_current_max, float v_speed, int v_min, int v_max, string format, string format_max, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            byte* native_format_max;
+            int format_max_byteCount = 0;
+            if (format_max != null)
+            {
+                format_max_byteCount = Encoding.UTF8.GetByteCount(format_max);
+                if (format_max_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format_max = Util.Allocate(format_max_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_max_stackBytes = stackalloc byte[format_max_byteCount + 1];
+                    native_format_max = native_format_max_stackBytes;
+                }
+                int native_format_max_offset = Util.GetUtf8(format_max, native_format_max, format_max_byteCount);
+                native_format_max[native_format_max_offset] = 0;
+            }
+            else { native_format_max = null; }
+            fixed (int* native_v_current_min = &v_current_min)
+            {
+                fixed (int* native_v_current_max = &v_current_max)
+                {
+                    byte ret = ImGuiNative.igDragIntRange2(native_label, native_v_current_min, native_v_current_max, v_speed, v_min, v_max, native_format, native_format_max, (ImGuiSliderFlags)flags);
+                    if (label_byteCount > Util.StackAllocationSizeLimit)
+                    {
+                        Util.Free(native_label);
+                    }
+                    if (format_byteCount > Util.StackAllocationSizeLimit)
+                    {
+                        Util.Free(native_format);
+                    }
+                    if (format_max_byteCount > Util.StackAllocationSizeLimit)
+                    {
+                        Util.Free(native_format_max);
+                    }
+                    return ret != 0;
+                }
+            }
+        }
         public static bool DragScalar(string label, ImGuiDataType data_type, IntPtr p_data, float v_speed)
         {
             byte* native_label;
@@ -5403,6 +6618,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool DragScalar(string label, int data_type, IntPtr p_data, float v_speed)
         {
             byte* native_label;
@@ -5467,6 +6683,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool DragScalar(string label, int data_type, IntPtr p_data, float v_speed, IntPtr p_min)
         {
             byte* native_label;
@@ -5531,6 +6748,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool DragScalar(string label, int data_type, IntPtr p_data, float v_speed, IntPtr p_min, IntPtr p_max)
         {
             byte* native_label;
@@ -5616,6 +6834,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool DragScalar(string label, int data_type, IntPtr p_data, float v_speed, IntPtr p_min, IntPtr p_max, string format)
         {
             byte* native_label;
@@ -5721,6 +6940,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool DragScalar(string label, int data_type, IntPtr p_data, float v_speed, IntPtr p_min, IntPtr p_max, string format, ImGuiSliderFlags flags)
         {
             byte* native_label;
@@ -5773,6 +6993,59 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool DragScalar(string label, ImGuiDataType data_type, IntPtr p_data, float v_speed, IntPtr p_min, IntPtr p_max, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            void* native_p_data = (void*)p_data.ToPointer();
+            void* native_p_min = (void*)p_min.ToPointer();
+            void* native_p_max = (void*)p_max.ToPointer();
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            byte ret = ImGuiNative.igDragScalar(native_label, data_type, native_p_data, v_speed, native_p_min, native_p_max, native_format, (ImGuiSliderFlags)flags);
+            if (label_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_label);
+            }
+            if (format_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_format);
+            }
+            return ret != 0;
+        }
         public static bool DragScalarN(string label, ImGuiDataType data_type, IntPtr p_data, int components, float v_speed)
         {
             byte* native_label;
@@ -5805,6 +7078,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool DragScalarN(string label, int data_type, IntPtr p_data, int components, float v_speed)
         {
             byte* native_label;
@@ -5869,6 +7143,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool DragScalarN(string label, int data_type, IntPtr p_data, int components, float v_speed, IntPtr p_min)
         {
             byte* native_label;
@@ -5933,6 +7208,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool DragScalarN(string label, int data_type, IntPtr p_data, int components, float v_speed, IntPtr p_min, IntPtr p_max)
         {
             byte* native_label;
@@ -6018,6 +7294,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool DragScalarN(string label, int data_type, IntPtr p_data, int components, float v_speed, IntPtr p_min, IntPtr p_max, string format)
         {
             byte* native_label;
@@ -6123,6 +7400,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool DragScalarN(string label, int data_type, IntPtr p_data, int components, float v_speed, IntPtr p_min, IntPtr p_max, string format, ImGuiSliderFlags flags)
         {
             byte* native_label;
@@ -6165,6 +7443,59 @@ namespace ImGuiNET
             }
             else { native_format = null; }
             byte ret = ImGuiNative.igDragScalarN(native_label, (ImGuiDataType)data_type, native_p_data, components, v_speed, native_p_min, native_p_max, native_format, flags);
+            if (label_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_label);
+            }
+            if (format_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_format);
+            }
+            return ret != 0;
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool DragScalarN(string label, ImGuiDataType data_type, IntPtr p_data, int components, float v_speed, IntPtr p_min, IntPtr p_max, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            void* native_p_data = (void*)p_data.ToPointer();
+            void* native_p_min = (void*)p_min.ToPointer();
+            void* native_p_max = (void*)p_max.ToPointer();
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            byte ret = ImGuiNative.igDragScalarN(native_label, data_type, native_p_data, components, v_speed, native_p_min, native_p_max, native_format, (ImGuiSliderFlags)flags);
             if (label_byteCount > Util.StackAllocationSizeLimit)
             {
                 Util.Free(native_label);
@@ -6255,6 +7586,7 @@ namespace ImGuiNET
             uint ret = ImGuiNative.igGetColorU32Col(idx, alpha_mul);
             return ret;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static uint GetColorU32(int idx)
         {
             float alpha_mul = 1.0f;
@@ -6266,6 +7598,7 @@ namespace ImGuiNET
             uint ret = ImGuiNative.igGetColorU32Col(idx, alpha_mul);
             return ret;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static uint GetColorU32(int idx, float alpha_mul)
         {
             uint ret = ImGuiNative.igGetColorU32Col((ImGuiCol)idx, alpha_mul);
@@ -6470,6 +7803,7 @@ namespace ImGuiNET
             int ret = ImGuiNative.igGetKeyIndex(imgui_key);
             return ret;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static int GetKeyIndex(int imgui_key)
         {
             int ret = ImGuiNative.igGetKeyIndex((ImGuiKey)imgui_key);
@@ -6500,6 +7834,7 @@ namespace ImGuiNET
             ImGuiNative.igGetMouseDragDelta(&__retval, button, lock_threshold);
             return __retval;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static Vector2 GetMouseDragDelta(int button)
         {
             Vector2 __retval;
@@ -6513,6 +7848,7 @@ namespace ImGuiNET
             ImGuiNative.igGetMouseDragDelta(&__retval, button, lock_threshold);
             return __retval;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static Vector2 GetMouseDragDelta(int button, float lock_threshold)
         {
             Vector2 __retval;
@@ -6566,6 +7902,7 @@ namespace ImGuiNET
             byte* ret = ImGuiNative.igGetStyleColorName(idx);
             return Util.StringFromPtr(ret);
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static string GetStyleColorName(int idx)
         {
             byte* ret = ImGuiNative.igGetStyleColorName((ImGuiCol)idx);
@@ -6576,6 +7913,7 @@ namespace ImGuiNET
             Vector4* ret = ImGuiNative.igGetStyleColorVec4(idx);
             return ret;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static Vector4* GetStyleColorVec4(int idx)
         {
             Vector4* ret = ImGuiNative.igGetStyleColorVec4((ImGuiCol)idx);
@@ -6989,6 +8327,59 @@ namespace ImGuiNET
                 return ret != 0;
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool InputDouble(string label, ref double v, double step, double step_fast, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            fixed (double* native_v = &v)
+            {
+                byte ret = ImGuiNative.igInputDouble(native_label, native_v, step, step_fast, native_format, (ImGuiInputTextFlags)flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_format);
+                }
+                return ret != 0;
+            }
+        }
         public static bool InputFloat(string label, ref float v)
         {
             byte* native_label;
@@ -7244,6 +8635,59 @@ namespace ImGuiNET
                 return ret != 0;
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool InputFloat(string label, ref float v, float step, float step_fast, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            fixed (float* native_v = &v)
+            {
+                byte ret = ImGuiNative.igInputFloat(native_label, native_v, step, step_fast, native_format, (ImGuiInputTextFlags)flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_format);
+                }
+                return ret != 0;
+            }
+        }
         public static bool InputFloat2(string label, ref Vector2 v)
         {
             byte* native_label;
@@ -7387,6 +8831,59 @@ namespace ImGuiNET
             fixed (Vector2* native_v = &v)
             {
                 byte ret = ImGuiNative.igInputFloat2(native_label, native_v, native_format, flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_format);
+                }
+                return ret != 0;
+            }
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool InputFloat2(string label, ref Vector2 v, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            fixed (Vector2* native_v = &v)
+            {
+                byte ret = ImGuiNative.igInputFloat2(native_label, native_v, native_format, (ImGuiInputTextFlags)flags);
                 if (label_byteCount > Util.StackAllocationSizeLimit)
                 {
                     Util.Free(native_label);
@@ -7552,6 +9049,59 @@ namespace ImGuiNET
                 return ret != 0;
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool InputFloat3(string label, ref Vector3 v, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            fixed (Vector3* native_v = &v)
+            {
+                byte ret = ImGuiNative.igInputFloat3(native_label, native_v, native_format, (ImGuiInputTextFlags)flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_format);
+                }
+                return ret != 0;
+            }
+        }
         public static bool InputFloat4(string label, ref Vector4 v)
         {
             byte* native_label;
@@ -7706,6 +9256,59 @@ namespace ImGuiNET
                 return ret != 0;
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool InputFloat4(string label, ref Vector4 v, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            fixed (Vector4* native_v = &v)
+            {
+                byte ret = ImGuiNative.igInputFloat4(native_label, native_v, native_format, (ImGuiInputTextFlags)flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_format);
+                }
+                return ret != 0;
+            }
+        }
         public static bool InputInt(string label, ref int v)
         {
             byte* native_label;
@@ -7832,6 +9435,37 @@ namespace ImGuiNET
                 return ret != 0;
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool InputInt(string label, ref int v, int step, int step_fast, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            fixed (int* native_v = &v)
+            {
+                byte ret = ImGuiNative.igInputInt(native_label, native_v, step, step_fast, (ImGuiInputTextFlags)flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                return ret != 0;
+            }
+        }
         public static bool InputInt2(string label, ref int v)
         {
             byte* native_label;
@@ -7886,6 +9520,37 @@ namespace ImGuiNET
             fixed (int* native_v = &v)
             {
                 byte ret = ImGuiNative.igInputInt2(native_label, native_v, flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                return ret != 0;
+            }
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool InputInt2(string label, ref int v, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            fixed (int* native_v = &v)
+            {
+                byte ret = ImGuiNative.igInputInt2(native_label, native_v, (ImGuiInputTextFlags)flags);
                 if (label_byteCount > Util.StackAllocationSizeLimit)
                 {
                     Util.Free(native_label);
@@ -7954,6 +9619,37 @@ namespace ImGuiNET
                 return ret != 0;
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool InputInt3(string label, ref int v, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            fixed (int* native_v = &v)
+            {
+                byte ret = ImGuiNative.igInputInt3(native_label, native_v, (ImGuiInputTextFlags)flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                return ret != 0;
+            }
+        }
         public static bool InputInt4(string label, ref int v)
         {
             byte* native_label;
@@ -8015,6 +9711,37 @@ namespace ImGuiNET
                 return ret != 0;
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool InputInt4(string label, ref int v, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            fixed (int* native_v = &v)
+            {
+                byte ret = ImGuiNative.igInputInt4(native_label, native_v, (ImGuiInputTextFlags)flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                return ret != 0;
+            }
+        }
         public static bool InputScalar(string label, ImGuiDataType data_type, IntPtr p_data)
         {
             byte* native_label;
@@ -8047,6 +9774,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool InputScalar(string label, int data_type, IntPtr p_data)
         {
             byte* native_label;
@@ -8111,6 +9839,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool InputScalar(string label, int data_type, IntPtr p_data, IntPtr p_step)
         {
             byte* native_label;
@@ -8175,6 +9904,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool InputScalar(string label, int data_type, IntPtr p_data, IntPtr p_step, IntPtr p_step_fast)
         {
             byte* native_label;
@@ -8260,6 +9990,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool InputScalar(string label, int data_type, IntPtr p_data, IntPtr p_step, IntPtr p_step_fast, string format)
         {
             byte* native_label;
@@ -8365,6 +10096,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool InputScalar(string label, int data_type, IntPtr p_data, IntPtr p_step, IntPtr p_step_fast, string format, ImGuiInputTextFlags flags)
         {
             byte* native_label;
@@ -8417,6 +10149,59 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool InputScalar(string label, ImGuiDataType data_type, IntPtr p_data, IntPtr p_step, IntPtr p_step_fast, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            void* native_p_data = (void*)p_data.ToPointer();
+            void* native_p_step = (void*)p_step.ToPointer();
+            void* native_p_step_fast = (void*)p_step_fast.ToPointer();
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            byte ret = ImGuiNative.igInputScalar(native_label, data_type, native_p_data, native_p_step, native_p_step_fast, native_format, (ImGuiInputTextFlags)flags);
+            if (label_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_label);
+            }
+            if (format_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_format);
+            }
+            return ret != 0;
+        }
         public static bool InputScalarN(string label, ImGuiDataType data_type, IntPtr p_data, int components)
         {
             byte* native_label;
@@ -8449,6 +10234,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool InputScalarN(string label, int data_type, IntPtr p_data, int components)
         {
             byte* native_label;
@@ -8513,6 +10299,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool InputScalarN(string label, int data_type, IntPtr p_data, int components, IntPtr p_step)
         {
             byte* native_label;
@@ -8577,6 +10364,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool InputScalarN(string label, int data_type, IntPtr p_data, int components, IntPtr p_step, IntPtr p_step_fast)
         {
             byte* native_label;
@@ -8662,6 +10450,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool InputScalarN(string label, int data_type, IntPtr p_data, int components, IntPtr p_step, IntPtr p_step_fast, string format)
         {
             byte* native_label;
@@ -8767,6 +10556,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool InputScalarN(string label, int data_type, IntPtr p_data, int components, IntPtr p_step, IntPtr p_step_fast, string format, ImGuiInputTextFlags flags)
         {
             byte* native_label;
@@ -8809,6 +10599,59 @@ namespace ImGuiNET
             }
             else { native_format = null; }
             byte ret = ImGuiNative.igInputScalarN(native_label, (ImGuiDataType)data_type, native_p_data, components, native_p_step, native_p_step_fast, native_format, flags);
+            if (label_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_label);
+            }
+            if (format_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_format);
+            }
+            return ret != 0;
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool InputScalarN(string label, ImGuiDataType data_type, IntPtr p_data, int components, IntPtr p_step, IntPtr p_step_fast, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            void* native_p_data = (void*)p_data.ToPointer();
+            void* native_p_step = (void*)p_step.ToPointer();
+            void* native_p_step_fast = (void*)p_step_fast.ToPointer();
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            byte ret = ImGuiNative.igInputScalarN(native_label, data_type, native_p_data, components, native_p_step, native_p_step_fast, native_format, (ImGuiInputTextFlags)flags);
             if (label_byteCount > Util.StackAllocationSizeLimit)
             {
                 Util.Free(native_label);
@@ -8874,6 +10717,34 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool InvisibleButton(string str_id, Vector2 size, int flags)
+        {
+            byte* native_str_id;
+            int str_id_byteCount = 0;
+            if (str_id != null)
+            {
+                str_id_byteCount = Encoding.UTF8.GetByteCount(str_id);
+                if (str_id_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_str_id = Util.Allocate(str_id_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_str_id_stackBytes = stackalloc byte[str_id_byteCount + 1];
+                    native_str_id = native_str_id_stackBytes;
+                }
+                int native_str_id_offset = Util.GetUtf8(str_id, native_str_id, str_id_byteCount);
+                native_str_id[native_str_id_offset] = 0;
+            }
+            else { native_str_id = null; }
+            byte ret = ImGuiNative.igInvisibleButton(native_str_id, size, (ImGuiButtonFlags)flags);
+            if (str_id_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_str_id);
+            }
+            return ret != 0;
+        }
         public static bool IsAnyItemActive()
         {
             byte ret = ImGuiNative.igIsAnyItemActive();
@@ -8915,6 +10786,7 @@ namespace ImGuiNET
             byte ret = ImGuiNative.igIsItemClicked(mouse_button);
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool IsItemClicked(int mouse_button)
         {
             byte ret = ImGuiNative.igIsItemClicked((ImGuiMouseButton)mouse_button);
@@ -8949,6 +10821,12 @@ namespace ImGuiNET
         public static bool IsItemHovered(ImGuiHoveredFlags flags)
         {
             byte ret = ImGuiNative.igIsItemHovered(flags);
+            return ret != 0;
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool IsItemHovered(int flags)
+        {
+            byte ret = ImGuiNative.igIsItemHovered((ImGuiHoveredFlags)flags);
             return ret != 0;
         }
         public static bool IsItemToggledOpen()
@@ -8989,6 +10867,7 @@ namespace ImGuiNET
             byte ret = ImGuiNative.igIsMouseClicked(button, repeat);
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool IsMouseClicked(int button)
         {
             byte repeat = 0;
@@ -9001,6 +10880,7 @@ namespace ImGuiNET
             byte ret = ImGuiNative.igIsMouseClicked(button, native_repeat);
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool IsMouseClicked(int button, bool repeat)
         {
             byte native_repeat = repeat ? (byte)1 : (byte)0;
@@ -9012,6 +10892,7 @@ namespace ImGuiNET
             byte ret = ImGuiNative.igIsMouseDoubleClicked(button);
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool IsMouseDoubleClicked(int button)
         {
             byte ret = ImGuiNative.igIsMouseDoubleClicked((ImGuiMouseButton)button);
@@ -9022,6 +10903,7 @@ namespace ImGuiNET
             byte ret = ImGuiNative.igIsMouseDown(button);
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool IsMouseDown(int button)
         {
             byte ret = ImGuiNative.igIsMouseDown((ImGuiMouseButton)button);
@@ -9033,6 +10915,7 @@ namespace ImGuiNET
             byte ret = ImGuiNative.igIsMouseDragging(button, lock_threshold);
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool IsMouseDragging(int button)
         {
             float lock_threshold = -1.0f;
@@ -9044,6 +10927,7 @@ namespace ImGuiNET
             byte ret = ImGuiNative.igIsMouseDragging(button, lock_threshold);
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool IsMouseDragging(int button, float lock_threshold)
         {
             byte ret = ImGuiNative.igIsMouseDragging((ImGuiMouseButton)button, lock_threshold);
@@ -9080,6 +10964,7 @@ namespace ImGuiNET
             byte ret = ImGuiNative.igIsMouseReleased(button);
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool IsMouseReleased(int button)
         {
             byte ret = ImGuiNative.igIsMouseReleased((ImGuiMouseButton)button);
@@ -9140,6 +11025,34 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool IsPopupOpen(string str_id, int flags)
+        {
+            byte* native_str_id;
+            int str_id_byteCount = 0;
+            if (str_id != null)
+            {
+                str_id_byteCount = Encoding.UTF8.GetByteCount(str_id);
+                if (str_id_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_str_id = Util.Allocate(str_id_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_str_id_stackBytes = stackalloc byte[str_id_byteCount + 1];
+                    native_str_id = native_str_id_stackBytes;
+                }
+                int native_str_id_offset = Util.GetUtf8(str_id, native_str_id, str_id_byteCount);
+                native_str_id[native_str_id_offset] = 0;
+            }
+            else { native_str_id = null; }
+            byte ret = ImGuiNative.igIsPopupOpenStr(native_str_id, (ImGuiPopupFlags)flags);
+            if (str_id_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_str_id);
+            }
+            return ret != 0;
+        }
         public static bool IsRectVisible(Vector2 size)
         {
             byte ret = ImGuiNative.igIsRectVisibleNil(size);
@@ -9171,6 +11084,12 @@ namespace ImGuiNET
             byte ret = ImGuiNative.igIsWindowFocused(flags);
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool IsWindowFocused(int flags)
+        {
+            byte ret = ImGuiNative.igIsWindowFocused((ImGuiFocusedFlags)flags);
+            return ret != 0;
+        }
         public static bool IsWindowHovered()
         {
             ImGuiHoveredFlags flags = (ImGuiHoveredFlags)0;
@@ -9180,6 +11099,12 @@ namespace ImGuiNET
         public static bool IsWindowHovered(ImGuiHoveredFlags flags)
         {
             byte ret = ImGuiNative.igIsWindowHovered(flags);
+            return ret != 0;
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool IsWindowHovered(int flags)
+        {
+            byte ret = ImGuiNative.igIsWindowHovered((ImGuiHoveredFlags)flags);
             return ret != 0;
         }
         public static void LabelText(string label, string fmt)
@@ -9991,6 +11916,33 @@ namespace ImGuiNET
                 Util.Free(native_str_id);
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static void OpenPopup(string str_id, int popup_flags)
+        {
+            byte* native_str_id;
+            int str_id_byteCount = 0;
+            if (str_id != null)
+            {
+                str_id_byteCount = Encoding.UTF8.GetByteCount(str_id);
+                if (str_id_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_str_id = Util.Allocate(str_id_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_str_id_stackBytes = stackalloc byte[str_id_byteCount + 1];
+                    native_str_id = native_str_id_stackBytes;
+                }
+                int native_str_id_offset = Util.GetUtf8(str_id, native_str_id, str_id_byteCount);
+                native_str_id[native_str_id_offset] = 0;
+            }
+            else { native_str_id = null; }
+            ImGuiNative.igOpenPopup(native_str_id, (ImGuiPopupFlags)popup_flags);
+            if (str_id_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_str_id);
+            }
+        }
         public static bool OpenPopupContextItem()
         {
             byte* native_str_id = null;
@@ -10052,6 +12004,44 @@ namespace ImGuiNET
                 Util.Free(native_str_id);
             }
             return ret != 0;
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool OpenPopupContextItem(string str_id, int popup_flags)
+        {
+            byte* native_str_id;
+            int str_id_byteCount = 0;
+            if (str_id != null)
+            {
+                str_id_byteCount = Encoding.UTF8.GetByteCount(str_id);
+                if (str_id_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_str_id = Util.Allocate(str_id_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_str_id_stackBytes = stackalloc byte[str_id_byteCount + 1];
+                    native_str_id = native_str_id_stackBytes;
+                }
+                int native_str_id_offset = Util.GetUtf8(str_id, native_str_id, str_id_byteCount);
+                native_str_id[native_str_id_offset] = 0;
+            }
+            else { native_str_id = null; }
+            byte ret = ImGuiNative.igOpenPopupContextItem(native_str_id, (ImGuiPopupFlags)popup_flags);
+            if (str_id_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_str_id);
+            }
+            return ret != 0;
+        }
+        [Obsolete("Use OpenPopupContextItem(string str_id, ImGuiPopupFlags popup_flags) instead.")]
+        public static bool OpenPopupOnItemClick(string str_id, ImGuiPopupFlags popup_flags)
+        {
+            return OpenPopupContextItem(str_id, popup_flags);
+        }
+        [Obsolete("Use OpenPopupContextItem(string str_id, ImGuiPopupFlags popup_flags) instead.")]
+        public static bool OpenPopupOnItemClick(string str_id, int popup_flags)
+        {
+            return OpenPopupContextItem(str_id, (ImGuiPopupFlags) popup_flags);
         }
         public static void PlotHistogram(string label, ref float values, int values_count)
         {
@@ -10867,6 +12857,7 @@ namespace ImGuiNET
         {
             ImGuiNative.igPushStyleColorU32(idx, col);
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static void PushStyleColor(int idx, uint col)
         {
             ImGuiNative.igPushStyleColorU32((ImGuiCol)idx, col);
@@ -10875,6 +12866,7 @@ namespace ImGuiNET
         {
             ImGuiNative.igPushStyleColorVec4(idx, col);
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static void PushStyleColor(int idx, Vector4 col)
         {
             ImGuiNative.igPushStyleColorVec4((ImGuiCol)idx, col);
@@ -10883,6 +12875,7 @@ namespace ImGuiNET
         {
             ImGuiNative.igPushStyleVarFloat(idx, val);
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static void PushStyleVar(int idx, float val)
         {
             ImGuiNative.igPushStyleVarFloat((ImGuiStyleVar)idx, val);
@@ -10891,6 +12884,7 @@ namespace ImGuiNET
         {
             ImGuiNative.igPushStyleVarVec2(idx, val);
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static void PushStyleVar(int idx, Vector2 val)
         {
             ImGuiNative.igPushStyleVarVec2((ImGuiStyleVar)idx, val);
@@ -10975,6 +12969,7 @@ namespace ImGuiNET
         {
             ImGuiNative.igResetMouseDragDelta(button);
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static void ResetMouseDragDelta(int button)
         {
             ImGuiNative.igResetMouseDragDelta((ImGuiMouseButton)button);
@@ -11123,6 +13118,36 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool Selectable(string label, bool selected, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte native_selected = selected ? (byte)1 : (byte)0;
+            Vector2 size = new Vector2();
+            byte ret = ImGuiNative.igSelectableBool(native_label, native_selected, (ImGuiSelectableFlags)flags, size);
+            if (label_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_label);
+            }
+            return ret != 0;
+        }
         public static bool Selectable(string label, bool selected, ImGuiSelectableFlags flags, Vector2 size)
         {
             byte* native_label;
@@ -11145,6 +13170,35 @@ namespace ImGuiNET
             else { native_label = null; }
             byte native_selected = selected ? (byte)1 : (byte)0;
             byte ret = ImGuiNative.igSelectableBool(native_label, native_selected, flags, size);
+            if (label_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_label);
+            }
+            return ret != 0;
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool Selectable(string label, bool selected, int flags, Vector2 size)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte native_selected = selected ? (byte)1 : (byte)0;
+            byte ret = ImGuiNative.igSelectableBool(native_label, native_selected, (ImGuiSelectableFlags)flags, size);
             if (label_byteCount > Util.StackAllocationSizeLimit)
             {
                 Util.Free(native_label);
@@ -11214,6 +13268,38 @@ namespace ImGuiNET
             p_selected = native_p_selected_val != 0;
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool Selectable(string label, ref bool p_selected, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte native_p_selected_val = p_selected ? (byte)1 : (byte)0;
+            byte* native_p_selected = &native_p_selected_val;
+            Vector2 size = new Vector2();
+            byte ret = ImGuiNative.igSelectableBoolPtr(native_label, native_p_selected, (ImGuiSelectableFlags)flags, size);
+            if (label_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_label);
+            }
+            p_selected = native_p_selected_val != 0;
+            return ret != 0;
+        }
         public static bool Selectable(string label, ref bool p_selected, ImGuiSelectableFlags flags, Vector2 size)
         {
             byte* native_label;
@@ -11237,6 +13323,37 @@ namespace ImGuiNET
             byte native_p_selected_val = p_selected ? (byte)1 : (byte)0;
             byte* native_p_selected = &native_p_selected_val;
             byte ret = ImGuiNative.igSelectableBoolPtr(native_label, native_p_selected, flags, size);
+            if (label_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_label);
+            }
+            p_selected = native_p_selected_val != 0;
+            return ret != 0;
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool Selectable(string label, ref bool p_selected, int flags, Vector2 size)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte native_p_selected_val = p_selected ? (byte)1 : (byte)0;
+            byte* native_p_selected = &native_p_selected_val;
+            byte ret = ImGuiNative.igSelectableBoolPtr(native_label, native_p_selected, (ImGuiSelectableFlags)flags, size);
             if (label_byteCount > Util.StackAllocationSizeLimit)
             {
                 Util.Free(native_label);
@@ -11277,6 +13394,11 @@ namespace ImGuiNET
         public static void SetColorEditOptions(ImGuiColorEditFlags flags)
         {
             ImGuiNative.igSetColorEditOptions(flags);
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static void SetColorEditOptions(int flags)
+        {
+            ImGuiNative.igSetColorEditOptions((ImGuiColorEditFlags)flags);
         }
         public static void SetColumnOffset(int column_index, float offset_x)
         {
@@ -11363,6 +13485,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool SetDragDropPayload(string type, IntPtr data, uint sz, int cond)
         {
             byte* native_type;
@@ -11412,6 +13535,7 @@ namespace ImGuiNET
         {
             ImGuiNative.igSetMouseCursor(cursor_type);
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static void SetMouseCursor(int cursor_type)
         {
             ImGuiNative.igSetMouseCursor((ImGuiMouseCursor)cursor_type);
@@ -11427,6 +13551,7 @@ namespace ImGuiNET
             byte native_is_open = is_open ? (byte)1 : (byte)0;
             ImGuiNative.igSetNextItemOpen(native_is_open, cond);
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static void SetNextItemOpen(bool is_open, int cond)
         {
             byte native_is_open = is_open ? (byte)1 : (byte)0;
@@ -11451,6 +13576,7 @@ namespace ImGuiNET
             byte native_collapsed = collapsed ? (byte)1 : (byte)0;
             ImGuiNative.igSetNextWindowCollapsed(native_collapsed, cond);
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static void SetNextWindowCollapsed(bool collapsed, int cond)
         {
             byte native_collapsed = collapsed ? (byte)1 : (byte)0;
@@ -11475,6 +13601,7 @@ namespace ImGuiNET
             Vector2 pivot = new Vector2();
             ImGuiNative.igSetNextWindowPos(pos, cond, pivot);
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static void SetNextWindowPos(Vector2 pos, int cond)
         {
             Vector2 pivot = new Vector2();
@@ -11484,6 +13611,7 @@ namespace ImGuiNET
         {
             ImGuiNative.igSetNextWindowPos(pos, cond, pivot);
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static void SetNextWindowPos(Vector2 pos, int cond, Vector2 pivot)
         {
             ImGuiNative.igSetNextWindowPos(pos, (ImGuiCond)cond, pivot);
@@ -11497,6 +13625,7 @@ namespace ImGuiNET
         {
             ImGuiNative.igSetNextWindowSize(size, cond);
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static void SetNextWindowSize(Vector2 size, int cond)
         {
             ImGuiNative.igSetNextWindowSize(size, (ImGuiCond)cond);
@@ -11629,6 +13758,7 @@ namespace ImGuiNET
             byte native_collapsed = collapsed ? (byte)1 : (byte)0;
             ImGuiNative.igSetWindowCollapsedBool(native_collapsed, cond);
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static void SetWindowCollapsed(bool collapsed, int cond)
         {
             byte native_collapsed = collapsed ? (byte)1 : (byte)0;
@@ -11689,6 +13819,7 @@ namespace ImGuiNET
                 Util.Free(native_name);
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static void SetWindowCollapsed(string name, bool collapsed, int cond)
         {
             byte* native_name;
@@ -11759,6 +13890,7 @@ namespace ImGuiNET
         {
             ImGuiNative.igSetWindowPosVec2(pos, cond);
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static void SetWindowPos(Vector2 pos, int cond)
         {
             ImGuiNative.igSetWindowPosVec2(pos, (ImGuiCond)cond);
@@ -11816,6 +13948,7 @@ namespace ImGuiNET
                 Util.Free(native_name);
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static void SetWindowPos(string name, Vector2 pos, int cond)
         {
             byte* native_name;
@@ -11851,6 +13984,7 @@ namespace ImGuiNET
         {
             ImGuiNative.igSetWindowSizeVec2(size, cond);
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static void SetWindowSize(Vector2 size, int cond)
         {
             ImGuiNative.igSetWindowSizeVec2(size, (ImGuiCond)cond);
@@ -11908,6 +14042,7 @@ namespace ImGuiNET
                 Util.Free(native_name);
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static void SetWindowSize(string name, Vector2 size, int cond)
         {
             byte* native_name;
@@ -12292,6 +14427,59 @@ namespace ImGuiNET
                 return ret != 0;
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool SliderAngle(string label, ref float v_rad, float v_degrees_min, float v_degrees_max, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            fixed (float* native_v_rad = &v_rad)
+            {
+                byte ret = ImGuiNative.igSliderAngle(native_label, native_v_rad, v_degrees_min, v_degrees_max, native_format, (ImGuiSliderFlags)flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_format);
+                }
+                return ret != 0;
+            }
+        }
         public static bool SliderFloat(string label, ref float v, float v_min, float v_max)
         {
             byte* native_label;
@@ -12435,6 +14623,59 @@ namespace ImGuiNET
             fixed (float* native_v = &v)
             {
                 byte ret = ImGuiNative.igSliderFloat(native_label, native_v, v_min, v_max, native_format, flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_format);
+                }
+                return ret != 0;
+            }
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool SliderFloat(string label, ref float v, float v_min, float v_max, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            fixed (float* native_v = &v)
+            {
+                byte ret = ImGuiNative.igSliderFloat(native_label, native_v, v_min, v_max, native_format, (ImGuiSliderFlags)flags);
                 if (label_byteCount > Util.StackAllocationSizeLimit)
                 {
                     Util.Free(native_label);
@@ -12600,6 +14841,59 @@ namespace ImGuiNET
                 return ret != 0;
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool SliderFloat2(string label, ref Vector2 v, float v_min, float v_max, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            fixed (Vector2* native_v = &v)
+            {
+                byte ret = ImGuiNative.igSliderFloat2(native_label, native_v, v_min, v_max, native_format, (ImGuiSliderFlags)flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_format);
+                }
+                return ret != 0;
+            }
+        }
         public static bool SliderFloat3(string label, ref Vector3 v, float v_min, float v_max)
         {
             byte* native_label;
@@ -12743,6 +15037,59 @@ namespace ImGuiNET
             fixed (Vector3* native_v = &v)
             {
                 byte ret = ImGuiNative.igSliderFloat3(native_label, native_v, v_min, v_max, native_format, flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_format);
+                }
+                return ret != 0;
+            }
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool SliderFloat3(string label, ref Vector3 v, float v_min, float v_max, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            fixed (Vector3* native_v = &v)
+            {
+                byte ret = ImGuiNative.igSliderFloat3(native_label, native_v, v_min, v_max, native_format, (ImGuiSliderFlags)flags);
                 if (label_byteCount > Util.StackAllocationSizeLimit)
                 {
                     Util.Free(native_label);
@@ -12908,6 +15255,59 @@ namespace ImGuiNET
                 return ret != 0;
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool SliderFloat4(string label, ref Vector4 v, float v_min, float v_max, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            fixed (Vector4* native_v = &v)
+            {
+                byte ret = ImGuiNative.igSliderFloat4(native_label, native_v, v_min, v_max, native_format, (ImGuiSliderFlags)flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_format);
+                }
+                return ret != 0;
+            }
+        }
         public static bool SliderInt(string label, ref int v, int v_min, int v_max)
         {
             byte* native_label;
@@ -13051,6 +15451,59 @@ namespace ImGuiNET
             fixed (int* native_v = &v)
             {
                 byte ret = ImGuiNative.igSliderInt(native_label, native_v, v_min, v_max, native_format, flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_format);
+                }
+                return ret != 0;
+            }
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool SliderInt(string label, ref int v, int v_min, int v_max, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            fixed (int* native_v = &v)
+            {
+                byte ret = ImGuiNative.igSliderInt(native_label, native_v, v_min, v_max, native_format, (ImGuiSliderFlags)flags);
                 if (label_byteCount > Util.StackAllocationSizeLimit)
                 {
                     Util.Free(native_label);
@@ -13216,6 +15669,59 @@ namespace ImGuiNET
                 return ret != 0;
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool SliderInt2(string label, ref int v, int v_min, int v_max, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            fixed (int* native_v = &v)
+            {
+                byte ret = ImGuiNative.igSliderInt2(native_label, native_v, v_min, v_max, native_format, (ImGuiSliderFlags)flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_format);
+                }
+                return ret != 0;
+            }
+        }
         public static bool SliderInt3(string label, ref int v, int v_min, int v_max)
         {
             byte* native_label;
@@ -13359,6 +15865,59 @@ namespace ImGuiNET
             fixed (int* native_v = &v)
             {
                 byte ret = ImGuiNative.igSliderInt3(native_label, native_v, v_min, v_max, native_format, flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_format);
+                }
+                return ret != 0;
+            }
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool SliderInt3(string label, ref int v, int v_min, int v_max, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            fixed (int* native_v = &v)
+            {
+                byte ret = ImGuiNative.igSliderInt3(native_label, native_v, v_min, v_max, native_format, (ImGuiSliderFlags)flags);
                 if (label_byteCount > Util.StackAllocationSizeLimit)
                 {
                     Util.Free(native_label);
@@ -13524,6 +16083,59 @@ namespace ImGuiNET
                 return ret != 0;
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool SliderInt4(string label, ref int v, int v_min, int v_max, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            fixed (int* native_v = &v)
+            {
+                byte ret = ImGuiNative.igSliderInt4(native_label, native_v, v_min, v_max, native_format, (ImGuiSliderFlags)flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_format);
+                }
+                return ret != 0;
+            }
+        }
         public static bool SliderScalar(string label, ImGuiDataType data_type, IntPtr p_data, IntPtr p_min, IntPtr p_max)
         {
             byte* native_label;
@@ -13556,6 +16168,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool SliderScalar(string label, int data_type, IntPtr p_data, IntPtr p_min, IntPtr p_max)
         {
             byte* native_label;
@@ -13641,6 +16254,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool SliderScalar(string label, int data_type, IntPtr p_data, IntPtr p_min, IntPtr p_max, string format)
         {
             byte* native_label;
@@ -13746,6 +16360,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool SliderScalar(string label, int data_type, IntPtr p_data, IntPtr p_min, IntPtr p_max, string format, ImGuiSliderFlags flags)
         {
             byte* native_label;
@@ -13798,6 +16413,59 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool SliderScalar(string label, ImGuiDataType data_type, IntPtr p_data, IntPtr p_min, IntPtr p_max, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            void* native_p_data = (void*)p_data.ToPointer();
+            void* native_p_min = (void*)p_min.ToPointer();
+            void* native_p_max = (void*)p_max.ToPointer();
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            byte ret = ImGuiNative.igSliderScalar(native_label, data_type, native_p_data, native_p_min, native_p_max, native_format, (ImGuiSliderFlags)flags);
+            if (label_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_label);
+            }
+            if (format_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_format);
+            }
+            return ret != 0;
+        }
         public static bool SliderScalarN(string label, ImGuiDataType data_type, IntPtr p_data, int components, IntPtr p_min, IntPtr p_max)
         {
             byte* native_label;
@@ -13830,6 +16498,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool SliderScalarN(string label, int data_type, IntPtr p_data, int components, IntPtr p_min, IntPtr p_max)
         {
             byte* native_label;
@@ -13915,6 +16584,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool SliderScalarN(string label, int data_type, IntPtr p_data, int components, IntPtr p_min, IntPtr p_max, string format)
         {
             byte* native_label;
@@ -14020,6 +16690,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool SliderScalarN(string label, int data_type, IntPtr p_data, int components, IntPtr p_min, IntPtr p_max, string format, ImGuiSliderFlags flags)
         {
             byte* native_label;
@@ -14062,6 +16733,59 @@ namespace ImGuiNET
             }
             else { native_format = null; }
             byte ret = ImGuiNative.igSliderScalarN(native_label, (ImGuiDataType)data_type, native_p_data, components, native_p_min, native_p_max, native_format, flags);
+            if (label_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_label);
+            }
+            if (format_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_format);
+            }
+            return ret != 0;
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool SliderScalarN(string label, ImGuiDataType data_type, IntPtr p_data, int components, IntPtr p_min, IntPtr p_max, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            void* native_p_data = (void*)p_data.ToPointer();
+            void* native_p_min = (void*)p_min.ToPointer();
+            void* native_p_max = (void*)p_max.ToPointer();
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            byte ret = ImGuiNative.igSliderScalarN(native_label, data_type, native_p_data, components, native_p_min, native_p_max, native_format, (ImGuiSliderFlags)flags);
             if (label_byteCount > Util.StackAllocationSizeLimit)
             {
                 Util.Free(native_label);
@@ -14423,6 +17147,34 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool TreeNodeEx(string label, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte ret = ImGuiNative.igTreeNodeExStr(native_label, (ImGuiTreeNodeFlags)flags);
+            if (label_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_label);
+            }
+            return ret != 0;
+        }
         public static bool TreeNodeEx(string str_id, ImGuiTreeNodeFlags flags, string fmt)
         {
             byte* native_str_id;
@@ -14472,6 +17224,56 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool TreeNodeEx(string str_id, int flags, string fmt)
+        {
+            byte* native_str_id;
+            int str_id_byteCount = 0;
+            if (str_id != null)
+            {
+                str_id_byteCount = Encoding.UTF8.GetByteCount(str_id);
+                if (str_id_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_str_id = Util.Allocate(str_id_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_str_id_stackBytes = stackalloc byte[str_id_byteCount + 1];
+                    native_str_id = native_str_id_stackBytes;
+                }
+                int native_str_id_offset = Util.GetUtf8(str_id, native_str_id, str_id_byteCount);
+                native_str_id[native_str_id_offset] = 0;
+            }
+            else { native_str_id = null; }
+            byte* native_fmt;
+            int fmt_byteCount = 0;
+            if (fmt != null)
+            {
+                fmt_byteCount = Encoding.UTF8.GetByteCount(fmt);
+                if (fmt_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_fmt = Util.Allocate(fmt_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_fmt_stackBytes = stackalloc byte[fmt_byteCount + 1];
+                    native_fmt = native_fmt_stackBytes;
+                }
+                int native_fmt_offset = Util.GetUtf8(fmt, native_fmt, fmt_byteCount);
+                native_fmt[native_fmt_offset] = 0;
+            }
+            else { native_fmt = null; }
+            byte ret = ImGuiNative.igTreeNodeExStrStr(native_str_id, (ImGuiTreeNodeFlags)flags, native_fmt);
+            if (str_id_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_str_id);
+            }
+            if (fmt_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_fmt);
+            }
+            return ret != 0;
+        }
         public static bool TreeNodeEx(IntPtr ptr_id, ImGuiTreeNodeFlags flags, string fmt)
         {
             void* native_ptr_id = (void*)ptr_id.ToPointer();
@@ -14494,6 +17296,35 @@ namespace ImGuiNET
             }
             else { native_fmt = null; }
             byte ret = ImGuiNative.igTreeNodeExPtr(native_ptr_id, flags, native_fmt);
+            if (fmt_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_fmt);
+            }
+            return ret != 0;
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool TreeNodeEx(IntPtr ptr_id, int flags, string fmt)
+        {
+            void* native_ptr_id = (void*)ptr_id.ToPointer();
+            byte* native_fmt;
+            int fmt_byteCount = 0;
+            if (fmt != null)
+            {
+                fmt_byteCount = Encoding.UTF8.GetByteCount(fmt);
+                if (fmt_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_fmt = Util.Allocate(fmt_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_fmt_stackBytes = stackalloc byte[fmt_byteCount + 1];
+                    native_fmt = native_fmt_stackBytes;
+                }
+                int native_fmt_offset = Util.GetUtf8(fmt, native_fmt, fmt_byteCount);
+                native_fmt[native_fmt_offset] = 0;
+            }
+            else { native_fmt = null; }
+            byte ret = ImGuiNative.igTreeNodeExPtr(native_ptr_id, (ImGuiTreeNodeFlags)flags, native_fmt);
             if (fmt_byteCount > Util.StackAllocationSizeLimit)
             {
                 Util.Free(native_fmt);
@@ -14857,6 +17688,59 @@ namespace ImGuiNET
                 return ret != 0;
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool VSliderFloat(string label, Vector2 size, ref float v, float v_min, float v_max, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            fixed (float* native_v = &v)
+            {
+                byte ret = ImGuiNative.igVSliderFloat(native_label, size, native_v, v_min, v_max, native_format, (ImGuiSliderFlags)flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_format);
+                }
+                return ret != 0;
+            }
+        }
         public static bool VSliderInt(string label, Vector2 size, ref int v, int v_min, int v_max)
         {
             byte* native_label;
@@ -15011,6 +17895,59 @@ namespace ImGuiNET
                 return ret != 0;
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool VSliderInt(string label, Vector2 size, ref int v, int v_min, int v_max, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            fixed (int* native_v = &v)
+            {
+                byte ret = ImGuiNative.igVSliderInt(native_label, size, native_v, v_min, v_max, native_format, (ImGuiSliderFlags)flags);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_label);
+                }
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    Util.Free(native_format);
+                }
+                return ret != 0;
+            }
+        }
         public static bool VSliderScalar(string label, Vector2 size, ImGuiDataType data_type, IntPtr p_data, IntPtr p_min, IntPtr p_max)
         {
             byte* native_label;
@@ -15043,6 +17980,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool VSliderScalar(string label, Vector2 size, int data_type, IntPtr p_data, IntPtr p_min, IntPtr p_max)
         {
             byte* native_label;
@@ -15128,6 +18066,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool VSliderScalar(string label, Vector2 size, int data_type, IntPtr p_data, IntPtr p_min, IntPtr p_max, string format)
         {
             byte* native_label;
@@ -15233,6 +18172,7 @@ namespace ImGuiNET
             }
             return ret != 0;
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public static bool VSliderScalar(string label, Vector2 size, int data_type, IntPtr p_data, IntPtr p_min, IntPtr p_max, string format, ImGuiSliderFlags flags)
         {
             byte* native_label;
@@ -15275,6 +18215,59 @@ namespace ImGuiNET
             }
             else { native_format = null; }
             byte ret = ImGuiNative.igVSliderScalar(native_label, size, (ImGuiDataType)data_type, native_p_data, native_p_min, native_p_max, native_format, flags);
+            if (label_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_label);
+            }
+            if (format_byteCount > Util.StackAllocationSizeLimit)
+            {
+                Util.Free(native_format);
+            }
+            return ret != 0;
+        }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
+        public static bool VSliderScalar(string label, Vector2 size, ImGuiDataType data_type, IntPtr p_data, IntPtr p_min, IntPtr p_max, string format, int flags)
+        {
+            byte* native_label;
+            int label_byteCount = 0;
+            if (label != null)
+            {
+                label_byteCount = Encoding.UTF8.GetByteCount(label);
+                if (label_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_label = Util.Allocate(label_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_label_stackBytes = stackalloc byte[label_byteCount + 1];
+                    native_label = native_label_stackBytes;
+                }
+                int native_label_offset = Util.GetUtf8(label, native_label, label_byteCount);
+                native_label[native_label_offset] = 0;
+            }
+            else { native_label = null; }
+            void* native_p_data = (void*)p_data.ToPointer();
+            void* native_p_min = (void*)p_min.ToPointer();
+            void* native_p_max = (void*)p_max.ToPointer();
+            byte* native_format;
+            int format_byteCount = 0;
+            if (format != null)
+            {
+                format_byteCount = Encoding.UTF8.GetByteCount(format);
+                if (format_byteCount > Util.StackAllocationSizeLimit)
+                {
+                    native_format = Util.Allocate(format_byteCount + 1);
+                }
+                else
+                {
+                    byte* native_format_stackBytes = stackalloc byte[format_byteCount + 1];
+                    native_format = native_format_stackBytes;
+                }
+                int native_format_offset = Util.GetUtf8(format, native_format, format_byteCount);
+                native_format[native_format_offset] = 0;
+            }
+            else { native_format = null; }
+            byte ret = ImGuiNative.igVSliderScalar(native_label, size, data_type, native_p_data, native_p_min, native_p_max, native_format, (ImGuiSliderFlags)flags);
             if (label_byteCount > Util.StackAllocationSizeLimit)
             {
                 Util.Free(native_label);

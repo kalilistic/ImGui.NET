@@ -469,6 +469,7 @@ namespace ImGuiNET
                 }
             }
         }
+        [Obsolete("Use method with non-primitive (enum) arguments instead.")]
         public bool GetMouseCursorTexData(int cursor, out Vector2 out_offset, out Vector2 out_size, out Vector2 out_uv_border, out Vector2 out_uv_fill)
         {
             fixed (Vector2* native_out_offset = &out_offset)

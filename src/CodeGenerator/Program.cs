@@ -213,9 +213,8 @@ namespace CodeGenerator
                                 
                                 for (int j = 0; j < overload.Parameters.Length; j++)
                                 {
-                                    // We only want to replace enums that are not flags that are not a default value for this overload
+                                    // We only want to replace enums that are not a default value for this overload
                                     if (overload.Parameters[j].IsEnum && 
-                                        !overload.Parameters[j].Type.Contains("Flags") && 
                                         !defaults.TryGetValue(overload.Parameters[j].Name, out var unused))
                                     {
                                         var primitiveOverload =
@@ -358,9 +357,8 @@ namespace CodeGenerator
                             
                             for (int j = 0; j < overload.Parameters.Length; j++)
                             {
-                                // We only want to replace enums that are not flags that are not a default value for this overload
-                                if (overload.Parameters[j].IsEnum && 
-                                    !overload.Parameters[j].Type.Contains("Flags") && 
+                                // We only want to replace enums that are not a default value for this overload
+                                if (overload.Parameters[j].IsEnum &&
                                     !defaults.TryGetValue(overload.Parameters[j].Name, out var unused))
                                 {
                                     var primitiveOverload =
@@ -627,6 +625,10 @@ namespace CodeGenerator
             string invocationList = string.Join(", ", invocationArgs);
             string friendlyName = overload.FriendlyName;
 
+            // If we have a primitive overload, we want to notify callers that they should be using the enum-based signatures instead
+            if (primitiveOverloadIndex != -1)
+                writer.WriteLine("[Obsolete(\"Use method with non-primitive (enum) arguments instead.\")]");
+            
             string staticPortion = selfName == null ? "static " : string.Empty;
             writer.PushBlock($"public {staticPortion}{overrideRet ?? safeRet} {friendlyName}({invocationList})");
             foreach (string line in preCallLines)
