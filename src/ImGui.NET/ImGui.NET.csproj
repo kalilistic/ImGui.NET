@@ -50,7 +50,4 @@
       <Pack>true</Pack>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Generated\" />
-  </ItemGroup>
 </Project>
