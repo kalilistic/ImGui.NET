@@ -275,7 +275,7 @@ namespace CodeGenerator
                                         var oldParam = primitiveOverload.Parameters[j];
                                         var newParam = new TypeReference(oldParam.Name, "int", oldParam.ArraySize, new EnumDefinition[]{});
                                         primitiveOverload.Parameters[j] = newParam;
-                                        EmitOverload(writer, primitiveOverload, defaults, "NativePtr", j, oldParam.Type, classPrefix);
+                                        EmitOverload(writer, primitiveOverload, defaults, "NativePtr", classPrefix, j, oldParam.Type);
                                     }
                                 }
                             }
@@ -427,7 +427,7 @@ namespace CodeGenerator
                                     var oldParam = primitiveOverload.Parameters[j];
                                     var newParam = new TypeReference(oldParam.Name, "int", oldParam.ArraySize, new EnumDefinition[]{});
                                     primitiveOverload.Parameters[j] = newParam;
-                                    EmitOverload(writer, primitiveOverload, defaults, null, j, oldParam.Type, classPrefix);
+                                    EmitOverload(writer, primitiveOverload, defaults, null, classPrefix, j, oldParam.Type);
                                 }
                             }
                         }
@@ -475,9 +475,9 @@ namespace CodeGenerator
             OverloadDefinition overload,
             Dictionary<string, string> defaultValues,
             string selfName,
+            string classPrefix,
             int primitiveOverloadIndex = -1,
-            string primitiveOverloadEnumName = null,
-            string classPrefix)
+            string primitiveOverloadEnumName = null)
         {
             if (overload.Parameters.Where(tr => tr.Name.EndsWith("_begin") || tr.Name.EndsWith("_end"))
                 .Any(tr => !defaultValues.ContainsKey(tr.Name)))
