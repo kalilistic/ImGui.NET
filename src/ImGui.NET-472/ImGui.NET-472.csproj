@@ -1,179 +1,43 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Title>ImGui.NET</Title>
+    <Description>A .NET wrapper for the Dear ImGui library.</Description>
+    <Company>Eric Mellino</Company>
+    <Product>ImGui.NET</Product>
+    <Copyright>Copyright ©  2019</Copyright>
+    <AssemblyVersion>1.82</AssemblyVersion>
+  </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0483026E-C6CE-4B1A-AA68-46544C08140B}</ProjectGuid>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ImGui.NET</RootNamespace>
     <AssemblyName>ImGui.NET</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Platforms>x64</Platforms>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <WarningLevel>4</WarningLevel>
+    <ErrorReport>prompt</ErrorReport>
+    <OutputPath>..\..\bin\Release\ImGui.NET-472\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\Release\ImGui.NET-472\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\bin\Release\ImGui.NET-472\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ImGui.NET\Generated\ImColor.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImDrawChannel.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImDrawCmd.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImDrawCmdHeader.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImDrawData.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImDrawFlags.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImDrawList.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImDrawListFlags.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImDrawListSplitter.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImDrawVert.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImFont.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImFontAtlas.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImFontAtlasCustomRect.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImFontAtlasFlags.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImFontConfig.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImFontGlyph.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImFontGlyphRangesBuilder.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGui.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiBackendFlags.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiButtonFlags.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiCol.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiColorEditFlags.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiComboFlags.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiCond.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiConfigFlags.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiDataType.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiDir.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiDockNodeFlags.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiDragDropFlags.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiFocusedFlags.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiHoveredFlags.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiInputTextCallbackData.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiInputTextFlags.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiIO.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiKey.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiKeyModFlags.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiListClipper.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiMouseButton.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiMouseCursor.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiNative.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiNavInput.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiOnceUponAFrame.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiPayload.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiPlatformIO.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiPlatformMonitor.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiPopupFlags.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiSelectableFlags.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiSizeCallbackData.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiSliderFlags.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiSortDirection.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiStorage.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiStyle.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiStyleVar.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiTabBarFlags.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiTabItemFlags.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiTableBgTarget.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiTableColumnFlags.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiTableColumnSortSpecs.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiTableFlags.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiTableRowFlags.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiTableSortSpecs.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiTextBuffer.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiTextFilter.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiTextRange.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiTreeNodeFlags.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiViewport.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiViewportFlags.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiWindowClass.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\ImGuiWindowFlags.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\StbTexteditRow.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\StbUndoRecord.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\StbUndoState.gen.cs" />
-    <Compile Include="ImGui.NET\Generated\STB_TexteditState.gen.cs" />
-    <Compile Include="ImGui.NET\ImDrawData.Manual.cs" />
-    <Compile Include="ImGui.NET\ImDrawList.Manual.cs" />
-    <Compile Include="ImGui.NET\ImGui.Manual.cs" />
-    <Compile Include="ImGui.NET\ImGuiSizeCallback.cs" />
-    <Compile Include="ImGui.NET\ImGuiTextEditCallback.cs" />
-    <Compile Include="ImGui.NET\ImVector.cs" />
-    <Compile Include="ImGui.NET\NullTerminatedString.cs" />
-    <Compile Include="ImGui.NET\Pair.cs" />
-    <Compile Include="ImGui.NET\RangeAccessor.cs" />
-    <Compile Include="ImGui.NET\Util.cs" />
-    <Compile Include="ImGuizmo.NET\ImGuizmo.gen.cs" />
-    <Compile Include="ImGuizmo.NET\ImGuizmoNative.gen.cs" />
-    <Compile Include="ImGuizmo.NET\MODE.gen.cs" />
-    <Compile Include="ImGuizmo.NET\OPERATION.gen.cs" />
-    <Compile Include="ImNodes.NET\AttributeFlags.gen.cs" />
-    <Compile Include="ImNodes.NET\ColorStyle.gen.cs" />
-    <Compile Include="ImNodes.NET\EmulateThreeButtonMouse.gen.cs" />
-    <Compile Include="ImNodes.NET\ImNodes.gen.cs" />
-    <Compile Include="ImNodes.NET\ImNodesNative.gen.cs" />
-    <Compile Include="ImNodes.NET\IO.gen.cs" />
-    <Compile Include="ImNodes.NET\LinkDetachWithModifierClick.gen.cs" />
-    <Compile Include="ImNodes.NET\PinShape.gen.cs" />
-    <Compile Include="ImNodes.NET\Style.gen.cs" />
-    <Compile Include="ImNodes.NET\StyleFlags.gen.cs" />
-    <Compile Include="ImNodes.NET\StyleVar.gen.cs" />
-    <Compile Include="ImPlot.NET\ImPlot.gen.cs" />
-    <Compile Include="ImPlot.NET\ImPlotAxisFlags.gen.cs" />
-    <Compile Include="ImPlot.NET\ImPlotCol.gen.cs" />
-    <Compile Include="ImPlot.NET\ImPlotColormap.gen.cs" />
-    <Compile Include="ImPlot.NET\ImPlotFlags.gen.cs" />
-    <Compile Include="ImPlot.NET\ImPlotLimits.gen.cs" />
-    <Compile Include="ImPlot.NET\ImPlotLocation.gen.cs" />
-    <Compile Include="ImPlot.NET\ImPlotMarker.gen.cs" />
-    <Compile Include="ImPlot.NET\ImPlotNative.gen.cs" />
-    <Compile Include="ImPlot.NET\ImPlotOrientation.gen.cs" />
-    <Compile Include="ImPlot.NET\ImPlotPoint.gen.cs" />
-    <Compile Include="ImPlot.NET\ImPlotRange.gen.cs" />
-    <Compile Include="ImPlot.NET\ImPlotStyle.gen.cs" />
-    <Compile Include="ImPlot.NET\ImPlotStyleVar.gen.cs" />
-    <Compile Include="ImPlot.NET\ImPlotYAxis.gen.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Costura.Fody">
-      <Version>4.1.0</Version>
-    </PackageReference>
-    <PackageReference Include="Fody">
-      <Version>6.0.5</Version>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="System.Numerics.Vectors">
-      <Version>4.5.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe">
-      <Version>4.5.2</Version>
-    </PackageReference>
+    <PackageReference Include="Costura.Fody" Version="5.3.0" PrivateAssets="all" IncludeAssets="all" />
+    <PackageReference Include="Fody" Version="6.5.1" PrivateAssets="all" IncludeAssets="all" />
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="costura64\cimgui.dll" />
@@ -182,6 +46,4 @@
     <EmbeddedResource Include="costura64\cimplot.dll" />
     <Content Include="FodyWeavers.xml" />
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
