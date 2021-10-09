@@ -41,21 +41,28 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FodyWeavers.xml"/>
-    <AdditionalFiles Include="natives\cimgui.dll">
+    
+    <!-- TODO(goat): THIS IS A HACK!!!! We should figure out why this is not being done by the build system!! -->
+    <AdditionalFiles Include="runtimes\win-x64\native\cimgui.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>cimgui.dll</TargetPath>
+      <TargetPath>runtimes\win-x64\native\cimgui.dll</TargetPath>
     </AdditionalFiles>
-    <AdditionalFiles Include="natives\cimguizmo.dll">
+    <AdditionalFiles Include="runtimes\win-x64\native\cimguizmo.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>cimguizmo.dll</TargetPath>
+      <TargetPath>runtimes\win-x64\native\cimguizmo.dll</TargetPath>
     </AdditionalFiles>
-    <AdditionalFiles Include="natives\cimnodes.dll">
+    <AdditionalFiles Include="runtimes\win-x64\native\cimnodes.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>cimnodes.dll</TargetPath>
+      <TargetPath>runtimes\win-x64\native\cimnodes.dll</TargetPath>
     </AdditionalFiles>
-    <AdditionalFiles Include="natives\cimplot.dll">
+    <AdditionalFiles Include="runtimes\win-x64\native\cimplot.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>cimplot.dll</TargetPath>
+      <TargetPath>runtimes\win-x64\native\cimplot.dll</TargetPath>
     </AdditionalFiles>
+
+    <Content Include="runtimes\win-x64\native\cimgui.dll" PackagePath="runtimes\win-x64\native\cimgui.dll" />
+    <Content Include="runtimes\win-x64\native\cimguizmo.dll" PackagePath="runtimes\win-x64\native\cimguizmo.dll" />
+    <Content Include="runtimes\win-x64\native\cimnodes.dll" PackagePath="runtimes\win-x64\native\cimnodes.dll" />
+    <Content Include="runtimes\win-x64\native\cimplot.dll" PackagePath="runtimes\win-x64\native\cimplot.dll" />
   </ItemGroup>
 </Project>
